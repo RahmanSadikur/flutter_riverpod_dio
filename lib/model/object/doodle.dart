@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 class Doodle {
   final String title;
   final String content;

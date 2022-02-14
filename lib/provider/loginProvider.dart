@@ -30,36 +30,36 @@ class LoginProvider with ChangeNotifier {
   static header() => {"Content-Type": "application/json"};
   late LoginError _loginError;
   bool get passwordVisible {
-    return this._passwordVisible;
+    return _passwordVisible;
   }
 
   togglePasswordVisible() {
-    this._passwordVisible = !this._passwordVisible;
+    _passwordVisible = !_passwordVisible;
     notifyListeners();
   }
 
   String get username {
-    return this._login.userName;
+    return _login.userName;
   }
 
   String get password {
-    return this._login.password;
+    return _login.password;
   }
 
   bool get isLoading {
-    return this._isLoading;
+    return _isLoading;
   }
 
   bool get hasError {
-    return this._hasError;
+    return _hasError;
   }
 
   String get errorMessage {
-    return this._errorMessage;
+    return _errorMessage;
   }
 
   bool get isLoggedIn {
-    return this._isLoggedIn;
+    return _isLoggedIn;
   }
 
   Future<bool> get isAuthenticated async {
@@ -71,15 +71,14 @@ class LoginProvider with ChangeNotifier {
     if (tokenExpiresStr != null) {
       expireDate = HttpDate.parse(tokenExpiresStr);
     } else {
-      var today = new DateTime.now();
-      expireDate = today.add(new Duration(days: 1));
+      var today = DateTime.now();
+      expireDate = today.add(const Duration(days: 1));
     }
 
-    if (accessToken != null &&
-        (expireDate != null && expireDate.isAfter(DateTime.now()))) {
-      this._isAuthenticated = true;
+    if (accessToken != null && (expireDate.isAfter(DateTime.now()))) {
+      _isAuthenticated = true;
     } else {
-      this._isAuthenticated = false;
+      _isAuthenticated = false;
     }
     notifyListeners();
     return _isAuthenticated;
@@ -111,12 +110,12 @@ class LoginProvider with ChangeNotifier {
     dio.options.responseType = ResponseType.json;
     Response response;
 
-    this._login = Login(userName: username, password: password);
+    _login = Login(userName: username, password: password);
 
     try {
       var formData = {
-        'userName': this._login.userName,
-        'password': this._login.password,
+        'userName': _login.userName,
+        'password': _login.password,
         'grant_type': 'password',
       };
 
@@ -136,45 +135,45 @@ class LoginProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         _token = Token.fromJson(response.data);
-        this._hasError = false;
-        this._errorMessage = '';
+        _hasError = false;
+        _errorMessage = '';
         if (_token.accessToken.isNotEmpty) {
           saveToken(_token);
           await getProfileImage();
           await getCurrentUserInfo();
-          this._isLoggedIn = true;
+          _isLoggedIn = true;
         } else {
-          this._isLoggedIn = false;
+          _isLoggedIn = false;
         }
       } else {
-        this._hasError = true;
-        this._errorMessage = 'Oops! Something went wrong!';
-        this._isLoggedIn = false;
+        _hasError = true;
+        _errorMessage = 'Oops! Something went wrong!';
+        _isLoggedIn = false;
       }
-      this._isLoading = false;
+      _isLoading = false;
       notifyListeners();
     } on DioError catch (e) {
       if (e.response != null) {
         _errorMessage = 'Failed to authenticate. Please try again later.';
         _loginError = LoginError.fromJson(e.response!.data);
         _errorMessage = _loginError.errorDescription;
-        this._isLoading = false;
-        this._isLoggedIn = false;
+        _isLoading = false;
+        _isLoggedIn = false;
 
         notifyListeners();
       } else {
         // Something happened in setting up or sending the request that triggered an Error
-        this._hasError = true;
-        this._errorMessage = 'Authentication failed.';
-        this._isLoading = false;
-        this._isLoggedIn = false;
+        _hasError = true;
+        _errorMessage = 'Authentication failed.';
+        _isLoading = false;
+        _isLoggedIn = false;
         notifyListeners();
       }
     } catch (error) {
-      this._hasError = true;
-      this._errorMessage = 'Could not authenticate you. Please try again.';
-      this._isLoading = false;
-      this._isLoggedIn = false;
+      _hasError = true;
+      _errorMessage = 'Could not authenticate you. Please try again.';
+      _isLoading = false;
+      _isLoggedIn = false;
       notifyListeners();
     }
   }
@@ -207,36 +206,32 @@ class LoginProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         if (response.data == null || response.data.toString().isEmpty) {
-          this._hasError = true;
-          this._errorMessage = 'Image not found';
+          _hasError = true;
+          _errorMessage = 'Image not found';
         } else {
           var profileImageData = response.data;
           sharedPreferences.setString('profileImageString', profileImageData);
-          this._hasError = false;
-          this._errorMessage = '';
+          _hasError = false;
+          _errorMessage = '';
         }
       } else {
-        this._hasError = true;
-        this._errorMessage = 'Oops! Something went wrong!';
+        _hasError = true;
+        _errorMessage = 'Oops! Something went wrong!';
       }
-      this._isLoading = false;
+      _isLoading = false;
     } on DioError catch (e) {
       if (e.response != null) {
-        print('Dio Error in client: ');
-        print(e.response!.data);
-
         _errorMessage = '';
-        this._isLoading = false;
+        _isLoading = false;
       } else {
-        this._hasError = true;
-        this._errorMessage = 'Server Error!';
-        this._isLoading = false;
+        _hasError = true;
+        _errorMessage = 'Server Error!';
+        _isLoading = false;
       }
     } catch (error) {
-      this._hasError = true;
-      this._errorMessage =
-          'Could not connect to server. Please try again later.';
-      this._isLoading = false;
+      _hasError = true;
+      _errorMessage = 'Could not connect to server. Please try again later.';
+      _isLoading = false;
     }
     notifyListeners();
   }
@@ -269,12 +264,12 @@ class LoginProvider with ChangeNotifier {
 
       if (response.statusCode == 200) {
         if (response.data['HasError'] == true) {
-          this._hasError = true;
-          this._errorMessage = 'Error from Server';
+          _hasError = true;
+          _errorMessage = 'Error from Server';
         } else {
           if (response.data == null || response.data.toString().isEmpty) {
-            this._hasError = true;
-            this._errorMessage = 'No data found!';
+            _hasError = true;
+            _errorMessage = 'No data found!';
           } else {
             sharedPreferences.setString(
                 'userId', response.data['Data']['User']['ID'].toString());
@@ -282,47 +277,43 @@ class LoginProvider with ChangeNotifier {
                 response.data['Data']['User']['UserName'].toString());
             sharedPreferences.setString('fullName',
                 response.data['Data']['User']['FullName'].toString());
-            this._hasError = false;
-            this._errorMessage = '';
+            _hasError = false;
+            _errorMessage = '';
           }
-          this._hasError = false;
-          this._errorMessage = '';
+          _hasError = false;
+          _errorMessage = '';
         }
       } else {
-        this._hasError = true;
-        this._errorMessage = 'Oops! Something went wromg!';
+        _hasError = true;
+        _errorMessage = 'Oops! Something went wromg!';
       }
-      this._isLoading = false;
+      _isLoading = false;
     } on DioError catch (e) {
       if (e.response != null) {
-        print('Dio Error in client: ');
-        print(e.response!.data);
-
         _errorMessage = '';
-        this._isLoading = false;
+        _isLoading = false;
       } else {
-        this._hasError = true;
-        this._errorMessage = 'Server Error!';
-        this._isLoading = false;
+        _hasError = true;
+        _errorMessage = 'Server Error!';
+        _isLoading = false;
       }
     } catch (error) {
-      this._hasError = true;
-      this._errorMessage =
-          'Could not connect to server. Please try again later.';
-      this._isLoading = false;
+      _hasError = true;
+      _errorMessage = 'Could not connect to server. Please try again later.';
+      _isLoading = false;
     }
     notifyListeners();
   }
 
   Future<void> login(String username, String password) async {
     // Response response;
-    this._isLoading = true;
+    _isLoading = true;
     return _authenticate(username, password);
 
     // try {
-    //   this._isLoading = true;
+    //   _isLoading = true;
     //   response = await authService.authenticate(username, password);
-    //   this._isLoading = false;
+    //   _isLoading = false;
     //   print(response.data);
 
     //   if (response.statusCode == 200) {
@@ -333,7 +324,7 @@ class LoginProvider with ChangeNotifier {
     //     print('Oops! Something went wromg.');
     //   }
     // } on Exception catch (e) {
-    //   this._isLoading = false;
+    //   _isLoading = false;
     //   print(e);
     // }
   }

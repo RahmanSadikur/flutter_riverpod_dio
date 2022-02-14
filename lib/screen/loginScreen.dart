@@ -34,11 +34,11 @@ class LoginScreen extends ConsumerWidget {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
+        content: const Text(
           'You are offline, Please check your internet Connection!',
           textAlign: TextAlign.start,
         ),
-        duration: Duration(seconds: 2),
+        duration: const Duration(seconds: 2),
         backgroundColor: Theme.of(context).errorColor,
       ),
     );
@@ -48,14 +48,14 @@ class LoginScreen extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Error'),
+        title: const Text('Error'),
         content: Text(errorMsg),
         actions: [
           TextButton(
             onPressed: () {
               Navigator.of(ctx).pop();
             },
-            child: Text('Okay'),
+            child: const Text('Okay'),
           ),
         ],
       ),
@@ -121,7 +121,7 @@ class LoginScreen extends ConsumerWidget {
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   labelText: 'Student ID',
-                                  prefixIcon: Icon(Icons.person_outlined),
+                                  prefixIcon: const Icon(Icons.person_outlined),
                                   filled: true,
                                   fillColor: Theme.of(context).canvasColor,
                                   border: OutlineInputBorder(
@@ -141,7 +141,7 @@ class LoginScreen extends ConsumerWidget {
                                   }
                                   String pattern1 =
                                       r'(^[0-9]{2}-[0-9]{5}-[1-3]$)';
-                                  RegExp regExp1 = new RegExp(pattern1);
+                                  RegExp regExp1 = RegExp(pattern1);
                                   if (!regExp1.hasMatch(v)) {
                                     return 'Enter Valid Student ID';
                                   }
@@ -189,7 +189,7 @@ class LoginScreen extends ConsumerWidget {
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
                                   labelText: 'Password',
-                                  prefixIcon: Icon(
+                                  prefixIcon: const Icon(
                                     Icons.lock_outlined,
                                   ),
                                   filled: true,
