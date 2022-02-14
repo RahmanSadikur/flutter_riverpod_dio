@@ -2,7 +2,7 @@
 
 // class AuthService {
 //   Dio _dio;
-//   static const tokenUrl = 'https://testapi.aiub.edu/ums-auth-api/token';
+//   static const tokenUrl = '';
 
 //   AuthService() {
 //     _dio = Dio(
