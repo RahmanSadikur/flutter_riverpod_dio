@@ -34,6 +34,9 @@
 # Web related
 lib/generated_plugin_registrant.dart
 lib/core/service/api.dart
+lib/core/service/authService.dart
+lib/core/setting/apiHeader.dart
+
 
 # Symbolication related
 app.*.symbols
