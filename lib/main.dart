@@ -1,3 +1,5 @@
+import 'package:dio_riverpod/screen/resultScreen.dart';
+import 'package:dio_riverpod/screen/resultScreenUpdated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio_riverpod/screen/homeScreen.dart';
@@ -18,6 +20,7 @@ class MyApp extends StatelessWidget {
       routes: {
         LoginScreen.routeName: (ctx) => LoginScreen(),
         HomeScreen.routeName: (ctx) => HomeScreen(),
+        ResultScreen2.routeName: (ctx) => ResultScreen2(),
       },
       home: LoginScreen(),
     );

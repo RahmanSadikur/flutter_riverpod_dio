@@ -40,6 +40,7 @@ dependencies:
   bouncing_widget: ^2.0.0
   json_serializable: ^6.1.4
   timeline_list: ^0.0.5
+  flutter_swiper: ^1.1.6
 
 dev_dependencies:
   flutter_test:

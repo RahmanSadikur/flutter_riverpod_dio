@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:dio_riverpod/model/object/doodle.dart';
+import 'package:dio_riverpod/screen/resultScreen.dart';
+import 'package:dio_riverpod/screen/resultScreenUpdated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -49,16 +51,21 @@ class HomeScreen extends ConsumerWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
                       children: [
-                        Card(
-                          margin: const EdgeInsets.only(bottom: 4),
-                          color: Theme.of(context).canvasColor,
-                          child: Container(
+                        GestureDetector(
+                          onDoubleTap: (() => Navigator.of(context)
+                              .pushNamed(ResultScreen2.routeName)),
+                          child: Card(
+                            margin: const EdgeInsets.only(bottom: 4),
                             color: Theme.of(context).canvasColor,
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(8.0),
-                            child: Center(
-                              child: Text(data.semesterTitle,
-                                  style: Theme.of(context).textTheme.headline4),
+                            child: Container(
+                              color: Theme.of(context).canvasColor,
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(8.0),
+                              child: Center(
+                                child: Text(data.semesterTitle,
+                                    style:
+                                        Theme.of(context).textTheme.headline4),
+                              ),
                             ),
                           ),
                         ),
